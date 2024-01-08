@@ -8,14 +8,16 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError, Regexp
+from flask_migrate import Migrate
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root@localhost/flask_db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 # Установка представления, на которое будет перенаправлен неавторизованный пользователь
 login_manager.login_view = 'login'
@@ -38,6 +40,7 @@ class Car(db.Model):
     description = db.Column(db.Text)
     price = db.Column(db.Integer)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
 
 
     def __repr__(self):
@@ -209,6 +212,22 @@ def car_detail(id):
     print(car.fuel_type)  # Для отладки
     return render_template('car_detail.html', car=car)
 
+def seed_data():
+    if not User.query.first() and not Car.query.first():
+        # Создание пользователей
+        user1 = User(username='user1', email='user1@example.com')
+        user1.set_password('password')
+        db.session.add(user1)
+
+        # Создание автомобилей
+        car1 = Car(brand='Toyota', model='Corolla', year=2020, user_id=user1.id)
+        db.session.add(car1)
+
+        db.session.commit()
+
 if __name__ == '__main__':
     db.create_all()
+    seed_data()
     app.run(debug=True)
+
+
