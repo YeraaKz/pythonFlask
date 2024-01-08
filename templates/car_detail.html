@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8">
+    <title>{{ car.brand }} {{ car.model }} Details</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        .navbar {
+            box-shadow: 0 2px 4px rgba(0, 0, 0, .1);
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+        }
+
+        .nav-item .nav-link {
+            color: black;
+        }
+
+        .nav-item .nav-link.active {
+            color: blue;
+        }
+
+        .btn-outline-primary {
+            margin-left: auto;
+        }
+
+        .image-gallery img {
+            width: 100px;
+            height: auto;
+            margin: 5px;
+        }
+
+        .main-image img {
+            width: 100%;
+            height: auto;
+        }
+
+        .description {
+            margin-top: 15px;
+        }
+
+        .description-block {
+            word-break: break-all;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        #phone-number {
+            display: none;
+            font-weight: bold;
+            color: #000;
+        }
+
+        .description p {
+            word-break: break-all;
+            white-space: nowrap;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <a class="navbar-brand" href="/">Tekeroto</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Arabalar</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/add">Duyuru yap</a>
+                </li>
+            </ul>
+            <!-- Правая часть навбара -->
+            <ul class="navbar-nav">
+                {% if current_user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/my_cars">Arabalarım</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Çıkış</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">Giriş</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/register">Kayıt</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container mt-4">
+    <h1>{{ car.brand }} {{ car.model }} {{ car.year }}</h1>
+    <div class="row">
+        <div class="col-md-8 main-image">
+            <img src="{{ car.image }}" alt="Main Image" class="img-fluid"/>
+            <div class="description-block description">
+                <strong>Açıklama:</strong>
+                <div>{{ car.description }}</div>
+                >
+            </div>
+
+        </div>
+
+        <div class="col-md-4">
+            <h3>{{ car.price }} ₺</h3>
+            <!-- Details List -->
+            <ul class="list-group">
+                <!-- Пример для car_detail.html -->
+                <div class="container mt-4">
+                    <h1>{{ car.brand }} {{ car.model }}</h1>
+                    <ul class="list-group">
+                        <li class="list-group-item"><strong>Marka:</strong> {{ car.brand }}</li>
+                        <li class="list-group-item"><strong>Model:</strong> {{ car.model }}</li>
+                        <li class="list-group-item"><strong>Yıl:</strong> {{ car.year }}</li>
+                        <li class="list-group-item"><strong>Yakıt Tipi:</strong> {{ car.fuel_type }}</li>
+                        <li class="list-group-item"><strong>Vites Kutusu:</strong> {{ car.transmission }}</li>
+                        <li class="list-group-item"><strong>Araç Durumu:</strong> {{ car.condition_status }}</li>
+                        <li class="list-group-item"><strong>Kilometre:</strong> {{ car.mileage }}</li>
+                        <li class="list-group-item"><strong>Kasa Tipi:</strong> {{ car.body_type }}</li>
+                        <li class="list-group-item"><strong>Motor Gücü:</strong> {{ car.engine_power }}</li>
+                        <li class="list-group-item"><strong>Motor Hacmi:</strong> {{ car.engine_volume }}</li>
+                        <li class="list-group-item"><strong>Renk:</strong> {{ car.color }}</li>
+                        <li class="list-group-item"><strong>Çekiş:</strong> {{ car.drive_unit }}</li>
+                        <li class="list-group-item"><strong>Garanti:</strong> {{ car.warranty }}</li>
+                        <li class="list-group-item"><strong>Fiyat:</strong> {{ car.price }}</li>
+
+                    </ul>
+                </div>
+
+            </ul>
+            <div class="mt-3">
+                <button onclick="showPhoneNumber()" class="btn btn-primary btn-block">Показать телефон</button>
+                <div id="phone-number">{{ car.owner.phone }}</div>
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script>
+    function showPhoneNumber() {
+        var phoneNumberDiv = document.getElementById('phone-number');
+        if (phoneNumberDiv.style.display === 'none') {
+            phoneNumberDiv.style.display = 'block'; // Показать номер телефона
+        } else {
+            phoneNumberDiv.style.display = 'none'; // Скрыть номер телефона
+        }
+    }
+</script>
+</body>
+</html>
